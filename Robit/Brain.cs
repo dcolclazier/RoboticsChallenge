@@ -2,9 +2,6 @@
 using System.Threading;
 
 namespace Robit {
-    public enum AlarmTriggers {
-        CancelRobotMovement,
-    }
    
     public class Brain {
         //singleton - only one brain, accessable globaly
