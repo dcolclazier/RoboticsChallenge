@@ -32,6 +32,8 @@
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
+    <Compile Include="GlobalState\Globals.cs" />
+    <Compile Include="Hardware\MotorDriver.cs" />
     <Compile Include="ThreadPool\Action.cs" />
     <Compile Include="Brain.cs" />
     <Compile Include="Events\IEventData.cs" />

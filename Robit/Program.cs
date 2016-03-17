@@ -48,23 +48,22 @@ namespace Robit
     {
         public static void Main() {
 
-            var action = new Action(test);
+            //init alarms
+
+
+            var action = new Action(MoveForwardHalfSpeedFiveSeconds);
             Brain.Instance.Execute(action);
 
         }
         //needs to check for movement cancel alarm...
-        private static void test() {
+        private static void MoveForwardHalfSpeedFiveSeconds() {
 
-            Brain.Instance.DriveTrain.Drive(MotorDriver.Direction.forward, 50, 5000);
-            Brain.Instance.DriveTrain.Stop();
+            
 
-            Brain.Instance.Sleep(1000, ref Globals.RestAlarm);
-
-            Brain.Instance.DriveTrain.Drive(MotorDriver.Direction.forward, 100, 1000);
-            Brain.Instance.DriveTrain.Stop();
-
-
-
+           //should cancel and stop prior to 5000ms if movementalarm goes true via any other thread...
+            
+           Brain.Instance.DriveTrain.Drive(MotorDriver.Direction.forward, 50, 5000);
+           Brain.Instance.DriveTrain.Stop();
         }
     }
 }

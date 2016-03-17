@@ -50,7 +50,7 @@ namespace Robit {
 
                 //if we got here, we have a valid action to execute. do so.
                 try {
-
+                    //check for alarms...
                     nextActionToExecute.InnerAction(); //execute the action.
                     if (nextActionToExecute.EventType != RobotEventType.None) {
                         Brain.Instance.TriggerEvent(nextActionToExecute.EventType, nextActionToExecute.EventData);
