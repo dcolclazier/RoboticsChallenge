@@ -38,7 +38,9 @@ What senses?
     -her tilt
     -her speed relative to wheel speed (slipping?)
 
+    -- layers...
 
+        -- hardware
 
 */
 namespace Robit
