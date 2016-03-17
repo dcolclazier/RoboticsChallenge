@@ -1,10 +1,36 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using Microsoft.SPOT;
-using SecretLabs.NETMF.Hardware;
-using Toolbox.NETMF.Hardware;
+﻿using System.Threading;
+
+namespace Robit
+{
+    public class Program
+    {
+        public static void Main() {
+
+            //enqueue an action to move forward at half speed for 5 seconds... will run in seperate thread.
+            //will stop if a CancelRobotMovement alarm is triggered by any thread... hopefully.
+            var moveAction = new Action(() => {
+                Brain.Instance.DriveTrain.Drive(MotorDriver.Direction.forward, 50, 5000);
+            });
+            Brain.Instance.Execute(moveAction);
+
+            //wait on the main thread for 1 second... the move action should have been running for 1 second
+            //by the time this finishes.
+            Thread.Sleep(1000);
+
+            //enqueue an action to cancel the robot movement, by triggering the appropriate alarm.
+            var stopAction = new Action(() => {
+                Brain.Instance.TriggerAlarm(AlarmTriggers.CancelRobotMovement);
+            });
+            Brain.Instance.Execute(stopAction);
+
+            //end result - motors should run for 1 second, then get cancelled, stopping them...
+
+        }
+    }
+}
+
+
+
 /*
 Ok, so robot has senses
 Robot will be receiving sensory input at unknown, random times
@@ -42,34 +68,3 @@ What senses?
         -- hardware
 
 */
-namespace Robit
-{
-    public class Program
-    {
-        public static void Main() {
-
-            //if this test is successfull, motors should run for ~1 second... the action thread
-            //should spin up, starting to wait for 5 seconds... the main thread will continue,
-            //spinning up the stop action thread 1 second later. This triggers the alarm to cancel
-            //robot movement, which should be detected by the movement ~50ms later.
-
-            var action = new Action(MoveForwardHalfSpeedFiveSeconds);
-            Brain.Instance.Execute(action);
-
-            Thread.Sleep(1000);
-
-            var stopAction = new Action(StopMovement);
-            Brain.Instance.Execute(stopAction);
-
-        }
-
-        private static void StopMovement() {
-            Brain.Instance.TriggerAlarm(AlarmTriggers.CancelRobotMovement);
-        }
-
-        private static void MoveForwardHalfSpeedFiveSeconds() {
-           //should cancel and stop prior to 5000ms if movementalarm goes true via any other thread...
-           Brain.Instance.DriveTrain.Drive(MotorDriver.Direction.forward, 50, 5000);
-        }
-    }
-}
