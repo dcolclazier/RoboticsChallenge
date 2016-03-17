@@ -44,12 +44,11 @@ namespace Robit {
             Globals.RightDriveSpeed = speed;
 
             if (!Brain.Instance.Sleep(time, ref Globals.CancelMovementAlarmTriggered)) {
-                //stop...
-                Stop();
-
                 //reset the alarm
                 Globals.CancelMovementAlarmTriggered = false;
             }
+
+            Stop();
         }
 
         public void Stop() {

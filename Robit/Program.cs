@@ -48,22 +48,28 @@ namespace Robit
     {
         public static void Main() {
 
-            //init alarms
-
+            //if this test is successfull, motors should run for ~1 second... the action thread
+            //should spin up, starting to wait for 5 seconds... the main thread will continue,
+            //spinning up the stop action thread 1 second later. This triggers the alarm to cancel
+            //robot movement, which should be detected by the movement ~50ms later.
 
             var action = new Action(MoveForwardHalfSpeedFiveSeconds);
             Brain.Instance.Execute(action);
 
+            Thread.Sleep(1000);
+
+            var stopAction = new Action(StopMovement);
+            Brain.Instance.Execute(stopAction);
+
         }
-        //needs to check for movement cancel alarm...
+
+        private static void StopMovement() {
+            Brain.Instance.TriggerAlarm(AlarmTriggers.CancelRobotMovement);
+        }
+
         private static void MoveForwardHalfSpeedFiveSeconds() {
-
-            
-
            //should cancel and stop prior to 5000ms if movementalarm goes true via any other thread...
-            
            Brain.Instance.DriveTrain.Drive(MotorDriver.Direction.forward, 50, 5000);
-           Brain.Instance.DriveTrain.Stop();
         }
     }
 }

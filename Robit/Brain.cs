@@ -11,17 +11,11 @@ namespace Robit {
         private static Brain _instance;
         public static Brain Instance => _instance ?? (_instance = new Brain());
 
-        //public HBridge MotorDriver { get; private set; }
-
+        //brain should have reference to all hardware
         public MotorDriver DriveTrain { get; private set; }
 
-        //brain should know about robots position, tilt, acceleration, and wheel speed 
-        //brain should be able to set cancel alarms for event actions to check... or maybe directly cancel? eek.
-        //      these stats could be globals that are updated by hardware sensor actions
-        //we need an alarm, cancel system.... i.e. ground clearance gone, stop movement actions...
 
 
-        //need to be able to cancel actions.............
         private Brain() {
             DriveTrain = new MotorDriver();
         }
@@ -68,7 +62,7 @@ namespace Robit {
         public void TriggerEvent(RobotEventType eventType, IEventData eventData) { 
             OnEventTriggered?.Invoke(eventType, eventData);
         }
-        public static void TriggerAlarm(AlarmTriggers alarm) {
+        public void TriggerAlarm(AlarmTriggers alarm) {
             OnAlarmReceived?.Invoke(alarm);
         }
     }
