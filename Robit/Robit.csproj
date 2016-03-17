@@ -32,13 +32,13 @@
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
-    <Compile Include="Action.cs" />
+    <Compile Include="ThreadPool\Action.cs" />
     <Compile Include="Brain.cs" />
-    <Compile Include="IEventData.cs" />
+    <Compile Include="Events\IEventData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="RobotEventType.cs" />
-    <Compile Include="ThreadPool.cs" />
+    <Compile Include="Events\RobotEventType.cs" />
+    <Compile Include="ThreadPool\ThreadPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.SPOT.Hardware" />
@@ -50,5 +50,8 @@
     <Reference Include="SecretLabs.NETMF.Hardware.Netduino" />
     <Reference Include="System" />
     <Reference Include="GoBus" />
+    <Reference Include="Toolbox.NETMF.Hardware.Core, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="Toolbox.NETMF.Hardware.HBridge, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="Toolbox.NETMF.Hardware.Netduino, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@ using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 using SecretLabs.NETMF.Hardware;
 using SecretLabs.NETMF.Hardware.Netduino;
+using Toolbox.NETMF.Hardware;
 /*
 Ok, so robot has senses
 Robot will be receiving sensory input at unknown, random times
@@ -49,8 +50,22 @@ namespace Robit
     {
         public static void Main()
         {
-            // write your code here
+            HBridge MotorDriver = new HBridge(new Netduino.PWM(Pins.GPIO_PIN_D6), Pins.GPIO_PIN_D7, 
+                                              new Netduino.PWM(Pins.GPIO_PIN_D5), Pins.GPIO_PIN_D4);
 
+            MotorDriver.SetState(HBridge.Motors.Motor1, 50); //half speed forward
+            MotorDriver.SetState(HBridge.Motors.Motor2, -50); //half speed backward
+
+            Thread.Sleep(5000); //run for 5 seconds
+
+            MotorDriver.SetState(HBridge.Motors.Motor1, -100); //full speed backward
+            MotorDriver.SetState(HBridge.Motors.Motor2, 100); //full speed forward
+
+            Thread.Sleep(5000); //run for 5 seconds
+
+            //stop both motors
+            MotorDriver.SetState(HBridge.Motors.Motor1,0);
+            MotorDriver.SetState(HBridge.Motors.Motor2,0);
 
         }
 
