@@ -46,28 +46,40 @@ What senses?
 */
 namespace Robit
 {
+    public static class Globals {
+        public static readonly Cpu.Pin Pin_LeftMotorSpeed = Pins.GPIO_PIN_D6;
+        public static readonly Cpu.Pin Pin_LeftMotorDirection = Pins.GPIO_PIN_D7;
+        public static readonly Cpu.Pin Pin_RightMotorSpeed = Pins.GPIO_PIN_D5;
+        public static readonly Cpu.Pin Pin_RightMotorDirection = Pins.GPIO_PIN_D4;
+        public static bool Moving { get; set; }
+        public static bool Turning { get; set; }
+        public static bool Scanning { get; set; }
+        public static int LeftDriveSpeed { get; set; }
+        public static int RightDriveSpeed { get; set; }
+    }
     public class Program
     {
-        public static void Main()
-        {
-            HBridge MotorDriver = new HBridge(new Netduino.PWM(Pins.GPIO_PIN_D6), Pins.GPIO_PIN_D7, 
-                                              new Netduino.PWM(Pins.GPIO_PIN_D5), Pins.GPIO_PIN_D4);
+        public static void Main() {
 
-            MotorDriver.SetState(HBridge.Motors.Motor1, 50); //half speed forward
-            MotorDriver.SetState(HBridge.Motors.Motor2, -50); //half speed backward
-
-            Thread.Sleep(5000); //run for 5 seconds
-
-            MotorDriver.SetState(HBridge.Motors.Motor1, -100); //full speed backward
-            MotorDriver.SetState(HBridge.Motors.Motor2, 100); //full speed forward
-
-            Thread.Sleep(5000); //run for 5 seconds
-
-            //stop both motors
-            MotorDriver.SetState(HBridge.Motors.Motor1,0);
-            MotorDriver.SetState(HBridge.Motors.Motor2,0);
+            var action = new Action(test);
+            Brain.Instance.Execute(action);
 
         }
+        //needs to check for movement cancel alarm...
+        private static void test() {
+            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor1, 50); //half speed forward
+            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor2, -50); //half speed backward
 
+            Thread.Sleep(5000); //run for 5 seconds /bug - should check for movement cancel alarm...
+
+            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor1, -100); //full speed backward
+            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor2, 100); //full speed forward
+
+            Thread.Sleep(5000); //run for 5 seconds /bug - should check for movement cancel alarm...
+
+            //stop both motors
+            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor1, 0);
+            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor2, 0);
+        }
     }
 }

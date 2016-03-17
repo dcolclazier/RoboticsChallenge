@@ -7,6 +7,8 @@ namespace Robit {
         public readonly RobotEventType EventType;
         public readonly IEventData EventData;
 
+        public bool Cancel { get; set; }
+
         public bool Persistent { get; private set; }
 
         public Action(ThreadStart innerAction, RobotEventType eventType = RobotEventType.None, IEventData eventData = null, bool persistent = false) {
@@ -14,6 +16,7 @@ namespace Robit {
             EventType = eventType;
             EventData = eventData;
             Persistent = persistent;
+            Cancel = false;
         }
 
         public void Persistence(bool persistant) {
