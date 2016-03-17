@@ -3,9 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Microsoft.SPOT;
-using Microsoft.SPOT.Hardware;
 using SecretLabs.NETMF.Hardware;
-using SecretLabs.NETMF.Hardware.Netduino;
 using Toolbox.NETMF.Hardware;
 /*
 Ok, so robot has senses
@@ -46,17 +44,6 @@ What senses?
 */
 namespace Robit
 {
-    public static class Globals {
-        public static readonly Cpu.Pin Pin_LeftMotorSpeed = Pins.GPIO_PIN_D6;
-        public static readonly Cpu.Pin Pin_LeftMotorDirection = Pins.GPIO_PIN_D7;
-        public static readonly Cpu.Pin Pin_RightMotorSpeed = Pins.GPIO_PIN_D5;
-        public static readonly Cpu.Pin Pin_RightMotorDirection = Pins.GPIO_PIN_D4;
-        public static bool Moving { get; set; }
-        public static bool Turning { get; set; }
-        public static bool Scanning { get; set; }
-        public static int LeftDriveSpeed { get; set; }
-        public static int RightDriveSpeed { get; set; }
-    }
     public class Program
     {
         public static void Main() {
@@ -67,19 +54,17 @@ namespace Robit
         }
         //needs to check for movement cancel alarm...
         private static void test() {
-            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor1, 50); //half speed forward
-            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor2, -50); //half speed backward
 
-            Thread.Sleep(5000); //run for 5 seconds /bug - should check for movement cancel alarm...
+            Brain.Instance.DriveTrain.Drive(MotorDriver.Direction.forward, 50, 5000);
+            Brain.Instance.DriveTrain.Stop();
 
-            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor1, -100); //full speed backward
-            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor2, 100); //full speed forward
+            Brain.Instance.Sleep(1000, ref Globals.RestAlarm);
 
-            Thread.Sleep(5000); //run for 5 seconds /bug - should check for movement cancel alarm...
+            Brain.Instance.DriveTrain.Drive(MotorDriver.Direction.forward, 100, 1000);
+            Brain.Instance.DriveTrain.Stop();
 
-            //stop both motors
-            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor1, 0);
-            Brain.Instance.MotorDriver.SetState(HBridge.Motors.Motor2, 0);
+
+
         }
     }
 }
